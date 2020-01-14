@@ -154,8 +154,11 @@ class ToDoTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         //행을 왼쪽으로 슬라이드하면 삭제 버튼이 나타난다.
         if editingStyle == .delete {
-            userToDoData.list.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            if let cell = tableView.cellForRow(at: indexPath) as? ToDoTableViewCell {
+                userToDoData.list.remove(at: userToDoData.list.firstIndex(where: { $0.identifier == cell.checkButton.tag })!)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                save()
+            }
         }
     }
 }
